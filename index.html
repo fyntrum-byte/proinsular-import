@@ -309,13 +309,13 @@ body.shell-body{overflow:hidden}
 <div id="pc-s-carga" class="sec on">
   <div class="card">
     <p style="font-size:15px;font-weight:600;margin-bottom:4px"><i class="ti ti-file-spreadsheet" style="color:var(--gr2)"></i> Cargar plantilla de importacion</p>
-    <p style="font-size:12px;color:var(--mt);margin-bottom:14px">Sube el Excel con las columnas del portal del Estado mas las columnas de rentabilidad ya agregadas. El sistema calcula todo automaticamente.</p>
+    <p style="font-size:12px;color:var(--mt);margin-bottom:14px">Sube el Excel de Productos por Caja. Si el archivo tiene varias pestañas (por ejemplo, el mismo archivo que usas para Líquido), el sistema detecta automáticamente la pestaña "Productos por Caja" y solo toma esos datos.</p>
 
     <div class="g2" style="margin-bottom:14px">
       <div class="dz" onclick="document.getElementById('pc-fi').click()">
         <i class="ti ti-upload" style="font-size:32px;display:block;margin-bottom:8px"></i>
         <p style="font-size:13px;font-weight:600">Arrastra tu Excel aqui</p>
-        <p style="font-size:11px;margin-top:4px">.xlsx compatible con tu plantilla Proinsular</p>
+        <p style="font-size:11px;margin-top:4px">.xlsx — pestaña "Productos por Caja"</p>
         <input type="file" id="pc-fi" accept=".xlsx,.xls,.csv" style="display:none" onchange="PC_leerExcel(event)">
       </div>
       <div style="background:var(--bg);border-radius:10px;padding:14px;border:.5px solid var(--bd)">
@@ -817,13 +817,13 @@ body.shell-body{overflow:hidden}
 <div id="lq-s-carga" class="sec on">
   <div class="card">
     <p style="font-size:15px;font-weight:600;margin-bottom:4px"><i class="ti ti-file-spreadsheet" style="color:var(--gr2)"></i> Cargar plantilla de importacion</p>
-    <p style="font-size:12px;color:var(--mt);margin-bottom:14px">Sube el Excel con las columnas del portal del Estado mas las columnas de rentabilidad ya agregadas. El sistema calcula todo automaticamente.</p>
+    <p style="font-size:12px;color:var(--mt);margin-bottom:14px">Sube el Excel de Líquido. Si el archivo tiene varias pestañas (por ejemplo, el mismo archivo que usas para Productos por Caja), el sistema detecta automáticamente la pestaña "Líquido" y solo toma esos datos.</p>
 
     <div class="g2" style="margin-bottom:14px">
       <div class="dz" onclick="document.getElementById('lq-fi').click()">
         <i class="ti ti-upload" style="font-size:32px;display:block;margin-bottom:8px"></i>
         <p style="font-size:13px;font-weight:600">Arrastra tu Excel aqui</p>
-        <p style="font-size:11px;margin-top:4px">.xlsx compatible con tu plantilla Proinsular</p>
+        <p style="font-size:11px;margin-top:4px">.xlsx — pestaña "Líquido"</p>
         <input type="file" id="lq-fi" accept=".xlsx,.xls,.csv" style="display:none" onchange="LQ_leerExcel(event)">
       </div>
       <div style="background:var(--bg);border-radius:10px;padding:14px;border:.5px solid var(--bd)">
@@ -3201,14 +3201,33 @@ function PC_delP(id) { PC_abrirConfirm('Eliminar este producto? Esta accion no s
 function PC_limpiar() { PC_abrirConfirm('Eliminar TODOS los productos de la importacion actual? Esta accion no se puede deshacer.', function(){ PC_D=[]; PC_save(); PC_mostrarUlt(); PC_refresh(); }); }
 
 // ─── CARGA DE EXCEL ───────────────────────────────────────────────────────────
+const PC_SHEET_ALIASES = ['productos por caja','producto por caja','pcaja','p.caja','caja'];
+function PC_findSheet(workbook) {
+  var names = workbook.SheetNames;
+  for(var i=0;i<names.length;i++){
+    var n = names[i].toLowerCase().trim();
+    if(PC_SHEET_ALIASES.indexOf(n)>=0) return names[i];
+  }
+  for(var i=0;i<names.length;i++){
+    var n = names[i].toLowerCase().trim();
+    for(var a=0;a<PC_SHEET_ALIASES.length;a++){
+      if(n.includes(PC_SHEET_ALIASES[a])) return names[i];
+    }
+  }
+  return null;
+}
 function PC_leerExcel(e) {
   var f = e.target.files[0]; if(!f) return;
   var r = new FileReader();
   r.onload = function(ev) {
     try {
       var wb = XLSX.read(ev.target.result, {type:'binary'});
-      var ws = wb.Sheets[wb.SheetNames[0]];
+      var sheetName = wb.SheetNames.length>1 ? (PC_findSheet(wb)||wb.SheetNames[0]) : wb.SheetNames[0];
+      var ws = wb.Sheets[sheetName];
       var json = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+      if(wb.SheetNames.length>1 && !PC_findSheet(wb)){
+        PC_showToast('No se encontró una hoja "Productos por Caja" en este Excel — se usó la primera hoja disponible','amarillo');
+      }
       // Buscar fila de headers (que tenga 'Codigo' o 'Descripcion')
       var hRow = -1;
       for(var i=0; i<Math.min(15,json.length); i++) {
@@ -4430,14 +4449,33 @@ function LQ_delP(id) { LQ_abrirConfirm('Eliminar este producto? Esta accion no s
 function LQ_limpiar() { LQ_abrirConfirm('Eliminar TODOS los productos de la importacion actual? Esta accion no se puede deshacer.', function(){ LQ_D=[]; LQ_save(); LQ_mostrarUlt(); LQ_refresh(); }); }
 
 // ─── CARGA DE EXCEL ───────────────────────────────────────────────────────────
+const LQ_SHEET_ALIASES = ['liquido','líquido','liquidos','líquidos'];
+function LQ_findSheet(workbook) {
+  var names = workbook.SheetNames;
+  for(var i=0;i<names.length;i++){
+    var n = names[i].toLowerCase().trim();
+    if(LQ_SHEET_ALIASES.indexOf(n)>=0) return names[i];
+  }
+  for(var i=0;i<names.length;i++){
+    var n = names[i].toLowerCase().trim();
+    for(var a=0;a<LQ_SHEET_ALIASES.length;a++){
+      if(n.includes(LQ_SHEET_ALIASES[a])) return names[i];
+    }
+  }
+  return null;
+}
 function LQ_leerExcel(e) {
   var f = e.target.files[0]; if(!f) return;
   var r = new FileReader();
   r.onload = function(ev) {
     try {
       var wb = XLSX.read(ev.target.result, {type:'binary'});
-      var ws = wb.Sheets[wb.SheetNames[0]];
+      var sheetName = wb.SheetNames.length>1 ? (LQ_findSheet(wb)||wb.SheetNames[0]) : wb.SheetNames[0];
+      var ws = wb.Sheets[sheetName];
       var json = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+      if(wb.SheetNames.length>1 && !LQ_findSheet(wb)){
+        LQ_showToast('No se encontró una hoja "Líquido" en este Excel — se usó la primera hoja disponible','amarillo');
+      }
       // Buscar fila de headers (que tenga 'Codigo' o 'Descripcion')
       var hRow = -1;
       for(var i=0; i<Math.min(15,json.length); i++) {
