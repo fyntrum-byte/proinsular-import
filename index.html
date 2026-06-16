@@ -2877,6 +2877,18 @@ body.shell-body{overflow:hidden}
   </div>
 </div>
 
+<!-- MODAL GENERICO: productos de un proveedor (usado por PC, LQ y CG) -->
+<div id="prov-prod-modal" class="modal-ov H" onclick="if(event.target===this)cerrarModalProveedor()">
+<div class="modal-box" style="max-width:480px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <p id="prov-prod-titulo" style="font-size:15px;font-weight:600"><i class="ti ti-building-store" style="color:var(--gr2)"></i> Proveedor</p>
+    <button class="btn btn-sm" onclick="cerrarModalProveedor()" style="padding:4px 10px"><i class="ti ti-x"></i></button>
+  </div>
+  <p id="prov-prod-sub" style="font-size:12px;color:var(--mt);margin-bottom:14px"></p>
+  <div id="prov-prod-lista" class="sx" style="max-height:400px;overflow-y:auto"></div>
+</div>
+</div>
+
 <script>
 const CR = {proimport:'Procostos*'};
 let pcInited = false, lqInited = false;
@@ -4108,7 +4120,7 @@ function PC_detalleImportacion(nombre, prods) {
   prods = Array.isArray(prods)?prods:[];
   if(!prods.length) return nombre+': sin productos';
   var lines = prods.map(function(d){
-    return '  - ['+d.codigo+'] '+d.desc+' | Familia: '+d.fam+' | Costo: $'+d.costo.toFixed(4)+' | PVP s/IVA: $'+d.pvpAct.toFixed(4)+' | Rentabilidad: '+d.rentPct+'% | Meta: '+(d.meta>0?d.meta+'%':'sin meta')+' | Semaforo: '+d.sem;
+    return '  - ['+d.codigo+'] '+d.desc+' | Familia: '+d.fam+' | Proveedor: '+(d.proveedor||'sin proveedor')+' | Costo: $'+d.costo.toFixed(4)+' | PVP s/IVA: $'+d.pvpAct.toFixed(4)+' | Rentabilidad: '+d.rentPct+'% | Meta: '+(d.meta>0?d.meta+'%':'sin meta')+' | Semaforo: '+d.sem;
   });
   return nombre+' ('+prods.length+' productos):\n'+lines.join('\n');
 }
@@ -5339,7 +5351,7 @@ function LQ_detalleImportacion(nombre, prods) {
   prods = Array.isArray(prods)?prods:[];
   if(!prods.length) return nombre+': sin productos';
   var lines = prods.map(function(d){
-    return '  - ['+d.codigo+'] '+d.desc+' | Familia: '+d.fam+' | Costo: $'+d.costo.toFixed(4)+' | PVP Actual (sin IVA): $'+d.pvpAct.toFixed(4)+' | Rentabilidad: '+d.rentPct+'% | Meta: '+(d.meta>0?d.meta+'%':'sin meta')+' | Semaforo: '+d.sem;
+    return '  - ['+d.codigo+'] '+d.desc+' | Familia: '+d.fam+' | Proveedor: '+(d.proveedor||'sin proveedor')+' | Costo: $'+d.costo.toFixed(4)+' | PVP Actual (sin IVA): $'+d.pvpAct.toFixed(4)+' | Rentabilidad: '+d.rentPct+'% | Meta: '+(d.meta>0?d.meta+'%':'sin meta')+' | Semaforo: '+d.sem;
   });
   return nombre+' ('+prods.length+' productos):\n'+lines.join('\n');
 }
@@ -6369,7 +6381,7 @@ function CG_buildCtx(q) {
       if(!D.length){ctx+=CG_TAB_LABELS[t]+': sin datos\n';return;}
       ctx+=CG_TAB_LABELS[t]+' ('+D.length+' productos):\n';
       D.slice(0,50).forEach(function(d){
-        ctx+='  - ['+d.codigo+'] '+d.desc+' | Costo: $'+d.costo+' | PVP: $'+d.pvpAct+' | Rent.: '+d.rentPct+'% | '+d.sem+'\n';
+        ctx+='  - ['+d.codigo+'] '+d.desc+' | Proveedor: '+(d.proveedor||'sin proveedor')+' | Costo: $'+d.costo+' | PVP: $'+d.pvpAct+' | Rent.: '+d.rentPct+'% | '+d.sem+'\n';
       });
       if(D.length>50) ctx+='  ... y '+(D.length-50)+' productos más\n';
       ctx+='\n';
@@ -6382,7 +6394,7 @@ function CG_buildCtx(q) {
       var D=CG_D[t]||[];
       if(!D.length) return;
       ctx+=CG_TAB_LABELS[t]+' ('+D.length+' productos):\n';
-      D.slice(0,30).forEach(function(d){ctx+='  - '+d.desc+' | Rent.: '+d.rentPct+'% | '+d.sem+'\n';});
+      D.slice(0,30).forEach(function(d){ctx+='  - '+d.desc+' | Proveedor: '+(d.proveedor||'sin proveedor')+' | Rent.: '+d.rentPct+'% | '+d.sem+'\n';});
       if(D.length>30) ctx+='  ... y '+(D.length-30)+' más\n';
       ctx+='\n';
     });
@@ -6509,7 +6521,43 @@ function buildPrecioComparador(productos) {
 }
 
 // ── RENDER GENÉRICO (usado por PC, LQ y CG) ─────────────────────
+// Cache temporal: guarda los datos de proveedores y las funciones de semaforo
+// de cada modulo (pc / lq / cg-xx) para poder abrir el modal de detalle sin
+// tener que volver a calcular ni pasar arrays completos por el atributo onclick.
+var _PROV_DATA_CACHE = {};
+var _PROV_FN_CACHE = {};
+
+function abrirModalProveedor(prefix, idx) {
+  var datos = _PROV_DATA_CACHE[prefix];
+  if(!datos || !datos[idx]) return;
+  var d = datos[idx];
+  var fns = _PROV_FN_CACHE[prefix] || {};
+  var semTagFn = fns.semTagFn || function(s){return s;};
+
+  document.getElementById('prov-prod-titulo').innerHTML = '<i class="ti ti-building-store" style="color:var(--gr2)"></i> '+d.prov;
+  document.getElementById('prov-prod-sub').textContent = d.total+' producto'+(d.total>1?'s':'')+' · Rentabilidad promedio '+d.rp.toFixed(2)+'%';
+
+  var lista = document.getElementById('prov-prod-lista');
+  var ordenados = d.prods.slice().sort(function(a,b){return a.rentPct-b.rentPct;});
+  lista.innerHTML = '<table><thead><tr><th>Producto</th><th style="text-align:right">Rentabilidad</th><th style="text-align:center">Semáforo</th></tr></thead><tbody>'
+    + ordenados.map(function(p){
+      var tag = semTagFn(p.sem);
+      return '<tr>'
+        +'<td style="max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+p.desc+'">'+p.desc+'</td>'
+        +'<td style="text-align:right;font-weight:600">'+p.rentPct+'%</td>'
+        +'<td style="text-align:center"><span class="tag '+tag+'">'+p.sem+'</span></td>'
+        +'</tr>';
+    }).join('')
+    +'</tbody></table>';
+
+  document.getElementById('prov-prod-modal').classList.remove('H');
+}
+function cerrarModalProveedor() {
+  document.getElementById('prov-prod-modal').classList.add('H');
+}
+
 function renderProveedorPanel(productos, prefix, semFn, semTagFn, f$Fn) {
+  _PROV_FN_CACHE[prefix] = {semFn:semFn, semTagFn:semTagFn};
   var datos = buildProveedorData(productos);
   var comparador = buildPrecioComparador(productos);
 
@@ -6518,11 +6566,12 @@ function renderProveedorPanel(productos, prefix, semFn, semTagFn, f$Fn) {
   if(rank) {
     if(!datos.length){rank.innerHTML='<div style="text-align:center;padding:24px;color:var(--mt)">Sin datos de proveedores. Asegúrate de que la columna PROVEEDOR esté en tu Excel.</div>';
     } else {
+      _PROV_DATA_CACHE[prefix] = datos;
       rank.innerHTML = '<div class="sx" style="max-height:300px;overflow-y:auto"><table>'
         +'<thead><tr><th>Proveedor</th><th>Productos</th><th>Rent. Prom.</th><th>Verde</th><th>Rojo</th><th>Costo Total</th></tr></thead><tbody>'
-        + datos.map(function(d){
+        + datos.map(function(d, idx){
           var sem = d.rp>0?'verde':d.rp===0?'amarillo':'rojo';
-          return '<tr>'
+          return '<tr style="cursor:pointer" onclick="abrirModalProveedor(\''+prefix+'\','+idx+')" title="Click para ver los productos de este proveedor">'
             +'<td style="font-weight:600">'+d.prov+'</td>'
             +'<td style="text-align:center">'+d.total+'</td>'
             +'<td><span class="tag '+(d.rp>12?'tg':d.rp>=0?'ty':'tr')+'" style="font-weight:700">'+d.rp.toFixed(2)+'%</span></td>'
