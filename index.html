@@ -4183,7 +4183,7 @@ async function PC_callIA(q) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         system: PC_buildCtx(q),
         messages: PC_chatHist.slice(-10)
@@ -4195,7 +4195,7 @@ async function PC_callIA(q) {
       PC_chatHist.push({role:'assistant', content:resp});
       return resp;
     }
-    if(data.error) return 'Error de API: ' + data.error.message + '\n\nVerifica que tu API Key sea valida y tenga saldo disponible en console.anthropic.com';
+    if(data.error) { var et=data.error.type; var sugerencia = et==='authentication_error' ? 'Verifica que tu API Key sea valida en console.anthropic.com' : (et==='not_found_error' ? 'El modelo configurado no esta disponible. Contacta al soporte tecnico del dashboard.' : (et==='rate_limit_error' ? 'Demasiadas solicitudes seguidas, espera unos segundos.' : 'Verifica tu saldo disponible en console.anthropic.com')); return 'Error de API (' + et + '): ' + data.error.message + '\n\n' + sugerencia; }
     return 'Sin respuesta del modelo. Intenta de nuevo.';
   } catch(e) {
     return 'No se pudo conectar con la API de Anthropic (' + e.message + ').\n\nUsando analisis local en su lugar:\n\n' + PC_analisisLocal(q);
@@ -5414,7 +5414,7 @@ async function LQ_callIA(q) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 1000,
         system: LQ_buildCtx(q),
         messages: LQ_chatHist.slice(-10)
@@ -5426,7 +5426,7 @@ async function LQ_callIA(q) {
       LQ_chatHist.push({role:'assistant', content:resp});
       return resp;
     }
-    if(data.error) return 'Error de API: ' + data.error.message + '\n\nVerifica que tu API Key sea valida y tenga saldo disponible en console.anthropic.com';
+    if(data.error) { var et=data.error.type; var sugerencia = et==='authentication_error' ? 'Verifica que tu API Key sea valida en console.anthropic.com' : (et==='not_found_error' ? 'El modelo configurado no esta disponible. Contacta al soporte tecnico del dashboard.' : (et==='rate_limit_error' ? 'Demasiadas solicitudes seguidas, espera unos segundos.' : 'Verifica tu saldo disponible en console.anthropic.com')); return 'Error de API (' + et + '): ' + data.error.message + '\n\n' + sugerencia; }
     return 'Sin respuesta del modelo. Intenta de nuevo.';
   } catch(e) {
     return 'No se pudo conectar con la API de Anthropic (' + e.message + ').\n\nUsando analisis local en su lugar:\n\n' + LQ_analisisLocal(q);
@@ -6399,7 +6399,7 @@ async function CG_callIA(q){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':GLOBAL_API_KEY,
                'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
         system:CG_buildCtx(q),messages:CG_chatHist.slice(-10)})
     });
     var data=await r.json();
