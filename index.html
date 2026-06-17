@@ -517,6 +517,7 @@ body.shell-body{overflow:hidden}
       <option value="verde">Verde (sobre meta)</option>
       <option value="amarillo">Amarillo (en meta)</option>
       <option value="rojo">Rojo (bajo meta)</option>
+      <option value="critico">Crítico (pérdida real)</option>
     </select>
     <button class="btn btn-sm btn-b" onclick="PC_guardarImportacionActual()" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
   </div>
@@ -1014,6 +1015,7 @@ body.shell-body{overflow:hidden}
       <option value="verde">Verde (sobre meta)</option>
       <option value="amarillo">Amarillo (en meta)</option>
       <option value="rojo">Rojo (bajo meta)</option>
+      <option value="critico">Crítico (pérdida real)</option>
     </select>
     <button class="btn btn-sm btn-b" onclick="LQ_guardarImportacionActual()" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
   </div>
@@ -1181,7 +1183,7 @@ body.shell-body{overflow:hidden}
   </div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
     <button class="btn" onclick="CG_cerrarModalNombre()">Cancelar</button>
-    <button class="btn btn-g" onclick="CG_confirmarNombreYProcesar()"><i class="ti ti-check"></i> Continuar</button>
+    <button class="btn btn-g" id="cg-modal-nombre-ok" onclick="CG_confirmarNombreYProcesar()"><i class="ti ti-check"></i> Continuar</button>
   </div>
 </div>
 </div>
@@ -1427,7 +1429,9 @@ body.shell-body{overflow:hidden}
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('qc')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-qc">0</span> productos</p>
@@ -1654,7 +1658,9 @@ body.shell-body{overflow:hidden}
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('ch')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-ch">0</span> productos</p>
@@ -1881,7 +1887,9 @@ body.shell-body{overflow:hidden}
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('co')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-co">0</span> productos</p>
@@ -2108,7 +2116,9 @@ body.shell-body{overflow:hidden}
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('cc')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-cc">0</span> productos</p>
@@ -2338,7 +2348,9 @@ body.shell-body{overflow:hidden}
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('con')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-con">0</span> productos</p>
@@ -2430,6 +2442,18 @@ body.shell-body{overflow:hidden}
       <div class="g2">
         <div class="campo"><label>Código</label><input id="cg-e-cod-ug" class="inp"></div>
         <div class="campo"><label>Descripción *</label><input id="cg-e-desc-ug" class="inp"></div>
+      </div>
+      <div class="g2" style="margin-top:10px">
+        <div class="campo"><label>Familia *</label>
+          <select id="cg-e-fam-ug" class="inp" onchange="CG_actualizarGruposEdit('ug')">
+            <option value="">Selecciona...</option>
+          </select>
+        </div>
+        <div class="campo"><label>Grupo</label>
+          <select id="cg-e-grp-ug" class="inp">
+            <option value="">Selecciona...</option>
+          </select>
+        </div>
       </div>
       <div class="g2" style="margin-top:10px">
         <div class="campo"><label>Cantidad</label><input id="cg-e-cant-ug" class="inp" type="number"></div>
@@ -2529,6 +2553,59 @@ body.shell-body{overflow:hidden}
         <div class="campo" style="grid-column:span 1"><label>Descripción *</label><input id="cg-m-desc-ug" class="inp" placeholder="Nombre del producto"></div>
       </div>
       <div class="g2">
+        <div class="campo"><label>Familia *</label>
+          <select id="cg-m-fam-ug" class="inp" onchange="CG_actualizarGrupos('ug');CG_calcularPreview('ug')">
+            <option value="">Selecciona...</option>
+            <option value="Aceites">Aceites</option>
+<option value="Alimentos Bebes">Alimentos Bebes</option>
+<option value="Arroz">Arroz</option>
+<option value="Azucar">Azucar</option>
+<option value="B A Z A R">B A Z A R</option>
+<option value="Bebidas">Bebidas</option>
+<option value="Bebidas Calientes">Bebidas Calientes</option>
+<option value="Botiquin">Botiquin</option>
+<option value="Cafeteria Pro">Cafeteria Pro</option>
+<option value="Carnes Y Embutidos">Carnes Y Embutidos</option>
+<option value="Cereales">Cereales</option>
+<option value="Cigarrillos">Cigarrillos</option>
+<option value="Condimentos">Condimentos</option>
+<option value="Congelados">Congelados</option>
+<option value="Cuidado Bebes">Cuidado Bebes</option>
+<option value="Cuidado Cabello">Cuidado Cabello</option>
+<option value="Cuidado Corporal">Cuidado Corporal</option>
+<option value="Cuidado Oral">Cuidado Oral</option>
+<option value="Desechables">Desechables</option>
+<option value="Despensa">Despensa</option>
+<option value="Enlatados Y Conservas">Enlatados Y Conservas</option>
+<option value="Frutas Y Legumbres">Frutas Y Legumbres</option>
+<option value="Lacteos">Lacteos</option>
+<option value="Licores">Licores</option>
+<option value="Limpieza Hogar">Limpieza Hogar</option>
+<option value="Mascotas">Mascotas</option>
+<option value="Mermeladas Y Jaleas">Mermeladas Y Jaleas</option>
+<option value="Otro">Otro</option>
+<option value="Panaderia">Panaderia</option>
+<option value="Pastas">Pastas</option>
+<option value="Promociones">Promociones</option>
+<option value="Recargas">Recargas</option>
+<option value="Reposteria">Reposteria</option>
+<option value="Salsas">Salsas</option>
+<option value="Servicios">Servicios</option>
+<option value="Snacks Y Confites">Snacks Y Confites</option>
+<option value="Sopas Caldos">Sopas Caldos</option>
+<option value="Vinagres">Vinagres</option>
+            <option value="__OTRO__">+ Nueva familia</option>
+          </select>
+        </div>
+        <div class="campo"><label>Grupo</label>
+          <select id="cg-m-grp-ug" class="inp" onchange="CG_onGrpChange('ug')">
+            <option value="">Selecciona...</option>
+          </select>
+        </div>
+      </div>
+      <div id="cg-fam-custom-ug" class="H" style="margin-top:8px"><input id="cg-m-fam-txt-ug" class="inp" placeholder="Nueva familia"></div>
+      <div id="cg-grp-custom-ug" class="H" style="margin-top:8px"><input id="cg-m-grp-txt-ug" class="inp" placeholder="Nuevo grupo"></div>
+      <div class="g2" style="margin-top:10px">
         <div class="campo"><label>Cantidad *</label><input id="cg-m-cant-ug" class="inp" type="number" min="0" placeholder="0" oninput="CG_calcularPreview('ug')"></div>
         <div class="campo"><label>Costo *</label><input id="cg-m-costo-ug" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('ug')"></div>
       </div>
@@ -2561,17 +2638,20 @@ body.shell-body{overflow:hidden}
     <div id="cg-s-ug-prods" class="sec">
       <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
         <input class="inp" type="text" id="cg-f-bus-ug" placeholder="Buscar..." style="flex:1;min-width:180px" oninput="CG_paginaActual['ug']=1;CG_renderTabla('ug')">
+        <select class="inp" id="cg-f-fam-ug" style="min-width:140px" onchange="CG_paginaActual['ug']=1;CG_renderTabla('ug')"><option value="">Todas las familias</option></select>
         <select class="inp" id="cg-f-rent-ug" style="min-width:160px" onchange="CG_paginaActual['ug']=1;CG_renderTabla('ug')">
           <option value="">Toda rentabilidad</option>
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('ug')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-ug">0</span> productos</p>
         <div class="sx" style="max-height:55vh;overflow-y:auto">
-          <table><thead><tr><th>Sem.</th><th>Código</th><th>Descripción</th><th>Cant.</th><th>Costo</th><th>Peso (kg)</th><th>Latam x kg +ABG</th><th>GASTOS FIJOS 26%</th><th>COSTO TOTAL UNIT.</th><th>P.V.P. ACTUAL</th><th>DIFERENCIA</th><th>UTILIDAD ACTUAL</th><th>TRABAJADORES 15%</th><th>BASE IMPONIBLE</th><th>IMP.RENTA 25%</th><th>RENTABILIDAD</th><th>UTIL.REAL</th><th></th></tr></thead><tbody id="cg-tb-prod-ug"></tbody></table>
+          <table><thead><tr><th>Sem.</th><th>Código</th><th>Descripción</th><th>Familia</th><th>Grupo</th><th>Cant.</th><th>Costo</th><th>Peso (kg)</th><th>Latam x kg +ABG</th><th>GASTOS FIJOS 26%</th><th>COSTO TOTAL UNIT.</th><th>P.V.P. ACTUAL</th><th>DIFERENCIA</th><th>UTILIDAD ACTUAL</th><th>TRABAJADORES 15%</th><th>BASE IMPONIBLE</th><th>IMP.RENTA 25%</th><th>RENTABILIDAD</th><th>UTIL.REAL</th><th></th></tr></thead><tbody id="cg-tb-prod-ug"></tbody></table>
         </div>
         <div id="cg-pag-ug"></div>
       </div>
@@ -2666,6 +2746,10 @@ body.shell-body{overflow:hidden}
       <div class="g2" style="margin-top:10px">
         <div class="campo"><label>P.V.P. ACTUAL *</label><input id="cg-e-pvp-loc" class="inp" type="number" step="0.0001"></div>
         <div class="campo"><label>Meta%</label><input id="cg-e-meta-loc" class="inp" type="number" step="0.5"></div>
+      </div>
+      <div class="campo" style="margin-top:10px">
+        <label>Observación</label>
+        <textarea id="cg-e-obs-loc" class="inp" rows="2" placeholder="Ej: Comprado a proveedores locales por festividades" style="resize:vertical;font-family:inherit"></textarea>
       </div></div>
   <div style="background:var(--glt);border-radius:8px;padding:9px 12px;font-size:11px;color:var(--gdk);margin-top:14px">
     <i class="ti ti-calculator"></i> Al guardar se recalculan automáticamente todos los valores.
@@ -2767,6 +2851,10 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>P.V.P. ACTUAL *</label><input id="cg-m-pvp-loc" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('loc')"></div>
         <div class="campo"><label>Meta% *</label><input id="cg-m-meta-loc" class="inp" type="number" step="0.5" placeholder="12" oninput="CG_calcularPreview('loc')"></div>
       </div>
+      <div class="campo" style="margin-top:10px">
+        <label>Observación</label>
+        <textarea id="cg-m-obs-loc" class="inp" rows="2" placeholder="Ej: Comprado a proveedores locales por festividades" style="resize:vertical;font-family:inherit"></textarea>
+      </div>
     </div>
     <!-- Preview en tiempo real -->
     <div style="background:var(--bg);border:.5px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px">
@@ -2788,7 +2876,9 @@ body.shell-body{overflow:hidden}
           <option value="verde">Verde (sobre meta)</option>
           <option value="amarillo">Amarillo (en meta)</option>
           <option value="rojo">Rojo (bajo meta)</option>
+          <option value="critico">Crítico (pérdida real)</option>
         </select>
+        <button class="btn btn-sm btn-b" onclick="CG_guardarImportacionActual('loc')" title="Guarda esta importacion en el Historial con su nombre"><i class="ti ti-archive"></i> Guardar en Historial</button>
       </div>
       <div class="card">
         <p style="font-size:11px;color:var(--mt);margin-bottom:8px"><span id="cg-t-count-loc">0</span> productos</p>
@@ -3348,7 +3438,8 @@ function PC_procesarExcel(nombreImportacion) {
     var uni = Math.max(parseFloat(row[cols.uni])||1,1);
     var pvpIva = parseFloat(row[cols.pvpIva])||0;
     var undPaca = Math.max(parseFloat(row[cols.undPaca])||1,1);
-    var ivaPct = parseFloat(String(row[cols.iva]||'15').replace('%',''))||15;
+    var ivaRaw = row[cols.iva];
+    var ivaPct = (ivaRaw===''||ivaRaw===undefined||ivaRaw===null) ? 15 : (parseFloat(String(ivaRaw).replace('%',''))||0);
     var municipioPct = parseFloat(row[cols.municipio])||0;
     var meta = parseFloat(row[cols.meta])||0;
     var famRaw = String(row[cols.fam]||'').trim();
@@ -3554,7 +3645,8 @@ function PC_guardarEdicion() {
   var uni=Math.max(parseFloat(document.getElementById('pc-e-uni').value)||1,1);
   var pvpIva=parseFloat(document.getElementById('pc-e-pvp').value)||0;
   var undPaca=Math.max(parseFloat(document.getElementById('pc-e-undpaca').value)||1,1);
-  var ivaPct=parseFloat(document.getElementById('pc-e-iva').value)||15;
+  var ivaRawEdit=document.getElementById('pc-e-iva').value;
+  var ivaPct=(ivaRawEdit===''||ivaRawEdit===null) ? 15 : (parseFloat(ivaRawEdit)||0);
   var municipioPct=parseFloat(document.getElementById('pc-e-municipio').value)||0;
   var meta=parseFloat(document.getElementById('pc-e-meta').value)||0;
   var fam=document.getElementById('pc-e-fam').value;
@@ -4800,7 +4892,7 @@ function LQ_guardarEdicion() {
     fam:fam, grp:grp, tipo:document.getElementById('lq-e-tipo').value, meta:LQ_r2(meta),
     cantidad:parseFloat(document.getElementById('lq-e-cant').value)||0,
     costo:LQ_r4(costo), uni:uni, jaba:LQ_r4(jaba),
-    iva:ivaPct, municipioPct:municipioPct,
+    municipioPct:municipioPct,
     flete:LQ_r4(c.flete), gab:LQ_r4(c.gab), hand:LQ_r4(c.hand), trans:LQ_r4(c.trans),
     dany:LQ_r4(c.dany), municipio:LQ_r4(c.municipio), cVenta:LQ_r4(c.cVenta),
     gFijos:LQ_r4(c.gFijos), cTotal:LQ_r4(c.cTotal), cTotalUnit:LQ_r4(c.cTotalUnit),
@@ -5579,6 +5671,28 @@ function CG_calcRow(tab,row){
   if(t==='D')return CG_calcD(row.costo,row.cantidad,row.pvpAct,row.meta);
 }
 
+// ── FAMILIA/GRUPO (solo categorias habilitadas, por ahora UIO Y GYE) ──
+const CG_FAMGRP_TABS = ['ug'];
+function CG_actualizarGrupos(tab) {
+  var fam = CG_gEl('cg-m-fam-'+tab).value;
+  var grpSel = CG_gEl('cg-m-grp-'+tab);
+  grpSel.innerHTML = '<option value="">Selecciona...</option>';
+  if(PC_FAMILIAS_DATA[fam]) { PC_FAMILIAS_DATA[fam].forEach(function(g){ var o=document.createElement('option'); o.value=g; o.textContent=g; grpSel.appendChild(o); }); }
+  var oO=document.createElement('option'); oO.value='__OTRO__'; oO.textContent='+ Nuevo grupo'; grpSel.appendChild(oO);
+  var fc=CG_gEl('cg-fam-custom-'+tab); if(fc) fc.classList.toggle('H', fam!=='__OTRO__');
+}
+function CG_onGrpChange(tab) {
+  var v = CG_gEl('cg-m-grp-'+tab).value;
+  var gc=CG_gEl('cg-grp-custom-'+tab); if(gc) gc.classList.toggle('H', v!=='__OTRO__');
+  CG_calcularPreview(tab);
+}
+function CG_actualizarGruposEdit(tab, grpActual) {
+  var fam = CG_gEl('cg-e-fam-'+tab).value;
+  var grpSel = CG_gEl('cg-e-grp-'+tab);
+  grpSel.innerHTML = '<option value="">Selecciona...</option>';
+  if(PC_FAMILIAS_DATA[fam]) { PC_FAMILIAS_DATA[fam].forEach(function(g){ var o=document.createElement('option'); o.value=g; o.textContent=g; if(g===grpActual) o.selected=true; grpSel.appendChild(o); }); }
+}
+
 // ── PREVIEW EN TIEMPO REAL (MANUAL) ──────────────────────────────
 function CG_calcularPreview(tab){
   var tipo=CG_TAB_TIPOS[tab];
@@ -5681,13 +5795,21 @@ function CG_agregarManual(tab){
       c=CG_calcD(costo,cant,pvpAct,meta);
     }
   } catch(e){CG_showToast('Error en el cálculo: '+e.message,'rojo');return;}
+  var famGrpFields={};
+  if(CG_FAMGRP_TABS.includes(tab)){
+    var fam=CG_gStr('cg-m-fam-'+tab), grp=CG_gStr('cg-m-grp-'+tab);
+    if(fam==='__OTRO__') fam=CG_gStr('cg-m-fam-txt-'+tab)||'Otro';
+    if(grp==='__OTRO__') grp=CG_gStr('cg-m-grp-txt-'+tab)||'Otro';
+    if(!fam){CG_showToast('Selecciona una Familia','rojo');return;}
+    famGrpFields={fam:fam, grp:grp||'--'};
+  }
   var prod=Object.assign({
     id:Date.now()+Math.random(),
     codigo:CG_gStr('cg-m-cod-'+tab)||'--',
     desc,cantidad:cant,costo:CG_r2(costo),pvpAct:CG_r2(pvpAct),meta:CG_r2(meta),
     fecha:new Date().toLocaleDateString('es-EC'),
     _impId:'M'+Date.now(),_impNombre:'Manual '+new Date().toLocaleDateString('es-EC'),tab
-  },extraFields,c);
+  },extraFields,c,tab==='loc'?{observacion:CG_gStr('cg-m-obs-'+tab)}:{},famGrpFields);
   CG_D[tab].unshift(prod);
   CG_save(tab);
   CG_limpiarManual(tab);
@@ -5697,9 +5819,16 @@ function CG_agregarManual(tab){
 }
 
 function CG_limpiarManual(tab){
-  ['cod','desc','cant','costo','flete','dany','pvp','meta','peso','factura'].forEach(function(f){
+  ['cod','desc','cant','costo','flete','dany','pvp','meta','peso','factura','obs','fam-txt','grp-txt'].forEach(function(f){
     var e=CG_gEl('cg-m-'+f+'-'+tab); if(e) e.value='';
   });
+  if(CG_FAMGRP_TABS.includes(tab)){
+    var famSel=CG_gEl('cg-m-fam-'+tab), grpSel=CG_gEl('cg-m-grp-'+tab);
+    if(famSel) famSel.value='';
+    if(grpSel) grpSel.innerHTML='<option value="">Selecciona...</option>';
+    var fc=CG_gEl('cg-fam-custom-'+tab); if(fc) fc.classList.add('H');
+    var gc=CG_gEl('cg-grp-custom-'+tab); if(gc) gc.classList.add('H');
+  }
   var prev=CG_gEl('cg-m-prev-'+tab);
   if(prev) prev.innerHTML='<span style="color:var(--mt)">Completa los campos para ver el cálculo</span>';
 }
@@ -5729,6 +5858,12 @@ function CG_abrirEditar(tab,id){
   if(tipo==='A'){set('flete',p.flete);set('dany',p.dany);}
   else if(tipo==='B'){set('peso',p.peso);set('dany',p.dany);}
   else if(tipo==='C'){set('peso',p.peso);}
+  if(tab==='loc'){set('obs',p.observacion);}
+  if(CG_FAMGRP_TABS.includes(tab)){
+    var famSel=CG_gEl('cg-e-fam-'+tab);
+    famSel.innerHTML='<option value="">Selecciona...</option>'+Object.keys(PC_FAMILIAS_DATA).map(function(f){return '<option value="'+f+'"'+(f===p.fam?' selected':'')+'>'+f+'</option>';}).join('');
+    CG_actualizarGruposEdit(tab, p.grp);
+  }
   var m=CG_gEl('cg-modal-ed-'+tab); if(m) m.classList.remove('H');
 }
 function CG_cerrarEditar(tab){var m=CG_gEl('cg-modal-ed-'+tab);if(m)m.classList.add('H');CG_editId=null;CG_editTab=null;}
@@ -5748,12 +5883,16 @@ function CG_guardarEdicion(tab){
     else if(tipo==='C'){var peso=CG_gVal('cg-e-peso-'+tab);extraFields={peso};c=CG_calcC(costo,peso,pvpAct,meta);}
     else if(tipo==='D'){c=CG_calcD(costo,cant,pvpAct,meta);}
   } catch(e){CG_showToast('Error en el cálculo','rojo');return;}
+  var famGrpFieldsEdit={};
+  if(CG_FAMGRP_TABS.includes(tab)){
+    famGrpFieldsEdit={fam:CG_gStr('cg-e-fam-'+tab)||p.fam, grp:CG_gStr('cg-e-grp-'+tab)||p.grp};
+  }
   CG_D[tab][idx]=Object.assign({},p,{
     codigo:CG_gStr('cg-e-cod-'+tab)||'--',
     desc:CG_gStr('cg-e-desc-'+tab)||p.desc,
     cantidad:cant,costo:CG_r2(costo),pvpAct:CG_r2(pvpAct),meta:CG_r2(meta),
     fechaEdit:new Date().toLocaleDateString('es-EC')
-  },extraFields,c);
+  },extraFields,c,tab==='loc'?{observacion:CG_gStr('cg-e-obs-'+tab)}:{},famGrpFieldsEdit);
   CG_save(tab); CG_cerrarEditar(tab); CG_renderTabla(tab); CG_refresh(tab);
   CG_showToast('Producto actualizado — Rentabilidad: '+c.rentPct+'%',c.sem);
 }
@@ -5793,6 +5932,7 @@ function CG_leerExcel(e,tab){
         dany:fi(['dany freire','dany']),pvpAct:fi(['p.v.p. actual','pvp actual']),
         meta:fi(['meta%','meta']),factura:fi(['factura']),
         proveedor:fi(['proveedor']),
+        fam:fi(['familia']),grp:fi(['grupo']),
       };
       var rows=json.slice(hRow+1).filter(function(r){return r[cols.desc]&&String(r[cols.desc]).trim().length>1;});
       if(!rows.length){CG_showToast('No se encontraron productos','rojo');return;}
@@ -5826,6 +5966,32 @@ function CG_confirmarNombreYProcesar(){
   var n=CG_gStr('cg-imp-nombre');if(!n){CG_showToast('Ingresa un nombre','rojo');return;}
   CG_cerrarModalNombre(); CG_procesarExcel(n);
 }
+function CG_guardarImportacionActual(tab) {
+  if(!CG_D[tab] || !CG_D[tab].length){ CG_showToast('No hay productos cargados para guardar','rojo'); return; }
+  var nombreActual = CG_D[tab][0]._impNombre;
+  if(!nombreActual) {
+    var sug = 'Importacion ' + CG_TAB_LABELS[tab] + ' ' + new Date().toLocaleDateString('es-EC');
+    document.getElementById('cg-imp-nombre').value = sug;
+    document.getElementById('cg-modal-nombre').classList.remove('H');
+    var btnCont = document.getElementById('cg-modal-nombre-ok');
+    btnCont.onclick = function(){
+      var nombre = document.getElementById('cg-imp-nombre').value.trim();
+      if(!nombre){ CG_showToast('Ingresa un nombre','rojo'); return; }
+      document.getElementById('cg-modal-nombre').classList.add('H');
+      CG_D[tab].forEach(function(d){ d._impNombre = nombre; d._impId = d._impId || ('H'+Date.now()); });
+      CG_save(tab);
+      CG_archivarActual(tab);
+      CG_save(tab);
+      CG_showToast('Importacion "'+nombre+'" guardada en Historial', 'verde');
+      btnCont.onclick = function(){ CG_confirmarNombreYProcesar(); };
+    };
+    return;
+  }
+  CG_archivarActual(tab);
+  CG_save(tab);
+  CG_showToast('Importacion "'+nombreActual+'" guardada en Historial', 'verde');
+}
+
 function CG_archivarActual(tab){
   var d=CG_D[tab]; if(!d||!d.length) return;
   var ra=d.reduce(function(s,x){return s+x.rentPct;},0)/d.length;
@@ -5857,10 +6023,14 @@ function CG_procesarExcel(nombre){
       else if(tipo==='C'){var pe=parseFloat(row[cols.peso])||0;extra={peso:pe};if(costo&&pe&&pvpAct)c=CG_calcC(costo,pe,pvpAct,meta);}
       else if(tipo==='D'){if(costo&&pvpAct)c=CG_calcD(costo,cant,pvpAct,meta);}
     } catch(e){errors++;}
+    var famGrpExtra={};
+    if(CG_FAMGRP_TABS.includes(tab)){
+      famGrpExtra={fam:String(row[cols.fam]||'Sin familia').trim()||'Sin familia', grp:String(row[cols.grp]||'--').trim()||'--'};
+    }
     nuevos.push(Object.assign({id:Date.now()+Math.random(),codigo:String(row[cols.cod]||'--').trim(),
       desc,cantidad:cant,costo:CG_r2(costo),pvpAct:CG_r2(pvpAct),meta:CG_r2(meta),
       proveedor:String(row[cols.proveedor]||'--').trim(),
-      fecha:new Date().toLocaleDateString('es-EC'),_impId:hid,_impNombre:nombre,tab},extra,c));
+      fecha:new Date().toLocaleDateString('es-EC'),_impId:hid,_impNombre:nombre,tab},extra,c,famGrpExtra));
     added++;
   });
   // Detectar duplicados
@@ -5914,17 +6084,25 @@ function CG_tendenciaHTML(tab, d) {
 
 function CG_renderTabla(tab){
   var D=CG_D[tab]||[],tipo=CG_TAB_TIPOS[tab];
+  var conFamGrp=CG_FAMGRP_TABS.includes(tab);
   var q=(CG_gEl('cg-f-bus-'+tab)||{value:''}).value.toLowerCase();
   var rent=(CG_gEl('cg-f-rent-'+tab)||{value:''}).value;
+  var fam=(CG_gEl('cg-f-fam-'+tab)||{value:''}).value;
+  if(conFamGrp){
+    var fams=[...new Set(D.map(function(d){return d.fam;}).filter(Boolean))].sort();
+    var fsel=CG_gEl('cg-f-fam-'+tab);
+    if(fsel) fsel.innerHTML='<option value="">Todas las familias</option>'+fams.map(function(f){return '<option value="'+f+'"'+(f===fam?' selected':'')+'>'+f+'</option>';}).join('');
+  }
   var filt=D.filter(function(d){
     if(q&&!d.desc.toLowerCase().includes(q)&&!String(d.codigo).includes(q))return false;
     if(rent&&d.sem!==rent)return false;
+    if(conFamGrp&&fam&&d.fam!==fam)return false;
     return true;
   });
   var tc=CG_gEl('cg-t-count-'+tab);if(tc)tc.textContent=filt.length;
   var tb=CG_gEl('cg-tb-prod-'+tab);if(!tb)return;
   tb.innerHTML='';
-  var nCols=tipo==='A'?16:tipo==='B'?17:tipo==='C'?12:tipo==='D'?13:15;
+  var nCols=(tipo==='A'?16:tipo==='B'?17:tipo==='C'?12:tipo==='D'?13:15)+(conFamGrp?2:0);
   if(!filt.length){tb.innerHTML='<tr><td colspan="'+nCols+'" style="text-align:center;padding:24px;color:var(--mt)">Sin productos.</td></tr>';CG_renderPag(tab,0,0);return;}
   var totalPag=Math.max(Math.ceil(filt.length/CG_PAGE_SIZE),1);
   if(CG_paginaActual[tab]>totalPag)CG_paginaActual[tab]=totalPag;
@@ -5934,8 +6112,9 @@ function CG_renderTabla(tab){
     var tr=document.createElement('tr');
     var cells='<td><span style="width:9px;height:9px;border-radius:50%;background:'+CG_semColor(d.sem)+';display:inline-block"></span></td>'
       +'<td style="font-size:10px;color:var(--mt)">'+d.codigo+'</td>'
-      +'<td style="font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+d.desc+'">'+d.desc+'</td>'
-      +'<td>'+d.cantidad+'</td><td>'+CG_f$(d.costo)+'</td>';
+      +'<td style="font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+d.desc+'">'+d.desc+'</td>';
+    if(conFamGrp)cells+='<td style="font-size:11px">'+(d.fam||'--')+'</td><td style="font-size:11px">'+(d.grp||'--')+'</td>';
+    cells+='<td>'+d.cantidad+'</td><td>'+CG_f$(d.costo)+'</td>';
     if(tipo==='A')cells+='<td>'+CG_f$(d.flete)+'</td><td>'+CG_f$(d.gab)+'</td><td>'+CG_f$(d.hand)+'</td><td>'+CG_f$(d.trans)+'</td><td>'+CG_f$(d.dany)+'</td><td>'+CG_f$(d.costoVenta)+'</td><td>'+CG_f$(d.gastosFijos)+'</td><td>'+CG_f$(d.costoTotalUnit)+'</td>';
     else if(tipo==='B')cells+='<td>'+CG_f$(d.peso)+'</td><td>'+CG_f$(d.flete)+'</td><td>'+CG_f$(d.gab)+'</td><td>'+CG_f$(d.hand)+'</td><td>'+CG_f$(d.trans)+'</td><td>'+CG_f$(d.dany)+'</td><td>'+CG_f$(d.costoVenta)+'</td><td>'+CG_f$(d.gastosFijos)+'</td><td>'+CG_f$(d.costoTotalUnit)+'</td>';
     else if(tipo==='C')cells+='<td>'+CG_f$(d.peso)+'</td><td>'+CG_f$(d.fleteAereo)+'</td><td>'+CG_f$(d.gastosFijos)+'</td><td>'+CG_f$(d.costoTotalUnit)+'</td>';
@@ -6674,6 +6853,7 @@ function CG_leerExcelMasivo(e) {
               dany:fi(['dany freire','dany']), pvpAct:fi(['p.v.p. actual','pvp actual']),
               meta:fi(['meta%','meta']), factura:fi(['factura']),
               proveedor:fi(['proveedor']),
+              fam:fi(['familia']), grp:fi(['grupo']),
             };
             var rows = json.slice(hRow+1).filter(function(r){return r[cols.desc]&&String(r[cols.desc]).trim().length>1;});
             if(rows.length>0) detected.push({tab:tab, sheetName:sheetName, rows:rows, cols:cols});
@@ -6728,10 +6908,14 @@ function CG_confirmarCargaMasiva() {
         else if(tipo==='C'){var pe=parseFloat(row[cols.peso])||0;extra={peso:pe};if(costo&&pe&&pvpAct)c=CG_calcC(costo,pe,pvpAct,meta);}
         else if(tipo==='D'){if(costo&&pvpAct)c=CG_calcD(costo,cant,pvpAct,meta);}
       } catch(e){errors++;}
+      var famGrpExtraM={};
+      if(CG_FAMGRP_TABS.includes(tab)){
+        famGrpExtraM={fam:String(row[cols.fam]||'Sin familia').trim()||'Sin familia', grp:String(row[cols.grp]||'--').trim()||'--'};
+      }
       nuevos.push(Object.assign({id:Date.now()+Math.random(),codigo:String(row[cols.cod]||'--').trim(),
         desc:desc,cantidad:cant,costo:CG_r2(costo),pvpAct:CG_r2(pvpAct),meta:CG_r2(meta),
         proveedor:String(row[cols.proveedor]||'--').trim(),
-        fecha:new Date().toLocaleDateString('es-EC'),_impId:hid,_impNombre:nombreBase,tab:tab},extra,c));
+        fecha:new Date().toLocaleDateString('es-EC'),_impId:hid,_impNombre:nombreBase,tab:tab},extra,c,famGrpExtraM));
       added++;
     });
     CG_detectarDuplicados(tab, nuevos);
@@ -6796,6 +6980,16 @@ function _buildInformeHTML(opts) {
     if(celestes.length) alertasHtml += '<li><b>'+celestes.length+'</b> producto(s) con variación de costo respecto a importaciones anteriores.</li>';
     if(perdida.length) alertasHtml += '<li><b>'+perdida.length+'</b> producto(s) con rentabilidad <span style="color:#dc2626;font-weight:700">negativa</span> (pérdida real, no solo bajo meta).</li>';
     alertasHtml += '</ul></div>';
+  }
+
+  // Observaciones por producto (solo aplica a categorías que capturan este campo, p.ej. Locales)
+  var conObs = D.filter(function(d){return d.observacion && String(d.observacion).trim().length;});
+  var obsHtml = '';
+  if(conObs.length) {
+    obsHtml = '<div class="inf-section"><h3>Observaciones</h3><table class="inf-table">'
+      +'<thead><tr><th>Producto</th><th>Observación</th></tr></thead><tbody>'
+      + conObs.map(function(d){return '<tr><td>'+d.desc+'</td><td>'+d.observacion+'</td></tr>';}).join('')
+      +'</tbody></table></div>';
   }
 
   return `
@@ -6865,6 +7059,7 @@ function _buildInformeHTML(opts) {
   </div>
 
   ${alertasHtml}
+  ${obsHtml}
   ${provHtml}
 
   <div class="inf-footer">Generado automáticamente por el Dashboard de Rentabilidad — Proinsular Supermercado · ${new Date().toLocaleString('es-EC')}</div>
