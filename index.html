@@ -3436,10 +3436,10 @@ function PC_archivarActual() {
     rent:ra.toFixed(2), verdes:PC_D.filter(function(d){return d.sem==='verde';}).length, rojos:PC_D.filter(function(d){return d.sem==='rojo';}).length};
   if(existIdx>=0) PC_H[existIdx]=entry; else PC_H.unshift(entry);
   PC_HD[hid] = PC_D.map(function(d){return Object.assign({},d);}); // copia completa
-  // Limite de 20 importaciones
-  if(PC_H.length>5){
-    var removed = PC_H.slice(20);
-    PC_H = PC_H.slice(0,5);
+  // Limite de 15 importaciones
+  if(PC_H.length>15){
+    var removed = PC_H.slice(15);
+    PC_H = PC_H.slice(0,15);
     removed.forEach(function(r){ delete PC_HD[r.id]; });
   }
 }
@@ -4751,10 +4751,10 @@ function LQ_archivarActual() {
     rent:ra.toFixed(2), verdes:LQ_D.filter(function(d){return d.sem==='verde';}).length, rojos:LQ_D.filter(function(d){return d.sem==='rojo';}).length};
   if(existIdx>=0) LQ_H[existIdx]=entry; else LQ_H.unshift(entry);
   LQ_HD[hid] = LQ_D.map(function(d){return Object.assign({},d);}); // copia completa
-  // Limite de 20 importaciones
-  if(LQ_H.length>5){
-    var removed = LQ_H.slice(20);
-    LQ_H = LQ_H.slice(0,5);
+  // Limite de 15 importaciones
+  if(LQ_H.length>15){
+    var removed = LQ_H.slice(15);
+    LQ_H = LQ_H.slice(0,15);
     removed.forEach(function(r){ delete LQ_HD[r.id]; });
   }
 }
@@ -6176,7 +6176,7 @@ function CG_archivarActual(tab){
   var idx=CG_H[tab].findIndex(function(h){return h.id===hid;});
   if(idx>=0)CG_H[tab][idx]=entry;else CG_H[tab].unshift(entry);
   CG_HD[tab][hid]=d.map(function(x){return Object.assign({},x);});
-  if(CG_H[tab].length>5){var rem=CG_H[tab].slice(5);CG_H[tab]=CG_H[tab].slice(0,5);rem.forEach(function(r){delete CG_HD[tab][r.id];});}
+  if(CG_H[tab].length>15){var rem=CG_H[tab].slice(15);CG_H[tab]=CG_H[tab].slice(0,15);rem.forEach(function(r){delete CG_HD[tab][r.id];});}
 }
 function CG_procesarExcel(nombre){
   if(!CG_pendXLS) return;
