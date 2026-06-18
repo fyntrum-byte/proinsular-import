@@ -219,7 +219,7 @@ body.shell-body{overflow:hidden}
       <div class="campo"><label>Cantidad</label><input id="pc-e-cant" class="inp" type="number" min="0"></div>
       <div class="campo"><label>Costo unit. $ *</label><input id="pc-e-costo" class="inp" type="number" step="0.0001"></div>
       <div class="campo"><label>Uni x Jaba *</label><input id="pc-e-uni" class="inp" type="number" min="1"></div>
-      <div class="campo"><label>Precio Jaba $ *</label><input id="pc-e-jaba" class="inp" type="number" step="0.01"></div>
+      <div class="campo"><label>Precio Jaba $</label><input id="pc-e-jaba" class="inp" type="number" step="0.01"></div>
     </div>
     <div class="g4">
       <div class="campo"><label>PVP con IVA $ *</label><input id="pc-e-pvp" class="inp" type="number" step="0.01"></div>
@@ -443,7 +443,7 @@ body.shell-body{overflow:hidden}
       <div class="campo"><label>Cantidad *</label><input id="pc-f-cant" class="inp" type="number" min="0" placeholder="0" oninput="PC_calcular()"></div>
       <div class="campo"><label>Costo unit. $ *</label><input id="pc-f-costo" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="PC_calcular()"></div>
       <div class="campo"><label>Uni. x Jaba/Paca *</label><input id="pc-f-uni" class="inp" type="number" min="1" placeholder="0" oninput="PC_calcular()"></div>
-      <div class="campo"><label>Precio Jaba $ *</label><input id="pc-f-jaba" class="inp" type="number" step="0.01" placeholder="0.00" oninput="PC_calcular()"></div>
+      <div class="campo"><label>Precio Jaba $</label><input id="pc-f-jaba" class="inp" type="number" step="0.01" placeholder="0.00" oninput="PC_calcular()"></div>
     </div>
     <div class="g4">
       <div class="campo"><label>PVP con IVA $ *</label><input id="pc-f-pvp" class="inp" type="number" step="0.01" placeholder="0.00" oninput="PC_calcular()"></div>
@@ -730,7 +730,7 @@ body.shell-body{overflow:hidden}
       <div class="campo"><label>Cantidad</label><input id="lq-e-cant" class="inp" type="number" min="0"></div>
       <div class="campo"><label>Costo unit. $ *</label><input id="lq-e-costo" class="inp" type="number" step="0.0001"></div>
       <div class="campo"><label>Uni x Jaba *</label><input id="lq-e-uni" class="inp" type="number" min="1"></div>
-      <div class="campo"><label>Precio Jaba $ *</label><input id="lq-e-jaba" class="inp" type="number" step="0.01"></div>
+      <div class="campo"><label>Precio Jaba $</label><input id="lq-e-jaba" class="inp" type="number" step="0.01"></div>
     </div>
     <div class="g4">
       <div class="campo"><label>P.V.P. Actual (sin IVA) $ *</label><input id="lq-e-pvp" class="inp" type="number" step="0.0001"></div>
@@ -950,7 +950,7 @@ body.shell-body{overflow:hidden}
       <div class="campo"><label>Cantidad *</label><input id="lq-f-cant" class="inp" type="number" min="0" placeholder="0" oninput="LQ_calcular()"></div>
       <div class="campo"><label>Costo unit. $ *</label><input id="lq-f-costo" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="LQ_calcular()"></div>
       <div class="campo"><label>Uni. x Jaba/Paca *</label><input id="lq-f-uni" class="inp" type="number" min="1" placeholder="0" oninput="LQ_calcular()"></div>
-      <div class="campo"><label>Precio Jaba $ *</label><input id="lq-f-jaba" class="inp" type="number" step="0.01" placeholder="0.00" oninput="LQ_calcular()"></div>
+      <div class="campo"><label>Precio Jaba $</label><input id="lq-f-jaba" class="inp" type="number" step="0.01" placeholder="0.00" oninput="LQ_calcular()"></div>
     </div>
     <div class="g4">
       <div class="campo"><label>P.V.P. Actual (sin IVA) $ *</label><input id="lq-f-pvp" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="LQ_calcular()"><span style="font-size:10px;color:var(--mt)">Precio de venta sin IVA, directo</span></div>
@@ -1218,7 +1218,7 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>Costo *</label><input id="cg-e-costo-qc" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-e-flete-qc" class="inp" type="number" step="0.0001"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-e-flete-qc" class="inp" type="number" step="0.0001"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-e-dany-qc" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
@@ -1402,7 +1402,7 @@ body.shell-body{overflow:hidden}
     <div class="fs">
       <div class="ft"><i class="ti ti-truck"></i> Datos de importación</div>
       <div class="g2" style="margin-bottom:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-m-flete-qc" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('qc')"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-m-flete-qc" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('qc')"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-m-dany-qc" class="inp" type="number" step="0.0001" placeholder="0.05" oninput="CG_calcularPreview('qc')"></div>
       </div>
       <div class="g2">
@@ -1530,7 +1530,7 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>Costo *</label><input id="cg-e-costo-ch" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-e-flete-ch" class="inp" type="number" step="0.0001"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-e-flete-ch" class="inp" type="number" step="0.0001"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-e-dany-ch" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
@@ -1631,7 +1631,7 @@ body.shell-body{overflow:hidden}
     <div class="fs">
       <div class="ft"><i class="ti ti-truck"></i> Datos de importación</div>
       <div class="g2" style="margin-bottom:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-m-flete-ch" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('ch')"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-m-flete-ch" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('ch')"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-m-dany-ch" class="inp" type="number" step="0.0001" placeholder="0.05" oninput="CG_calcularPreview('ch')"></div>
       </div>
       <div class="g2">
@@ -1759,7 +1759,7 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>Costo *</label><input id="cg-e-costo-co" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-e-flete-co" class="inp" type="number" step="0.0001"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-e-flete-co" class="inp" type="number" step="0.0001"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-e-dany-co" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
@@ -1860,7 +1860,7 @@ body.shell-body{overflow:hidden}
     <div class="fs">
       <div class="ft"><i class="ti ti-truck"></i> Datos de importación</div>
       <div class="g2" style="margin-bottom:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-m-flete-co" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('co')"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-m-flete-co" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('co')"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-m-dany-co" class="inp" type="number" step="0.0001" placeholder="0.05" oninput="CG_calcularPreview('co')"></div>
       </div>
       <div class="g2">
@@ -1988,7 +1988,7 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>Costo *</label><input id="cg-e-costo-cc" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-e-flete-cc" class="inp" type="number" step="0.0001"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-e-flete-cc" class="inp" type="number" step="0.0001"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-e-dany-cc" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
@@ -2089,7 +2089,7 @@ body.shell-body{overflow:hidden}
     <div class="fs">
       <div class="ft"><i class="ti ti-truck"></i> Datos de importación</div>
       <div class="g2" style="margin-bottom:10px">
-        <div class="campo"><label>Flete Barco Unitario *</label><input id="cg-m-flete-cc" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('cc')"></div>
+        <div class="campo"><label>Flete Barco Unitario</label><input id="cg-m-flete-cc" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('cc')"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-m-dany-cc" class="inp" type="number" step="0.0001" placeholder="0.05" oninput="CG_calcularPreview('cc')"></div>
       </div>
       <div class="g2">
@@ -2217,7 +2217,7 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>Costo *</label><input id="cg-e-costo-con" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
-        <div class="campo"><label>Peso (kg) *</label><input id="cg-e-peso-con" class="inp" type="number" step="0.001"></div>
+        <div class="campo"><label>Peso (kg)</label><input id="cg-e-peso-con" class="inp" type="number" step="0.001"></div>
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-e-dany-con" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
@@ -2319,7 +2319,7 @@ body.shell-body{overflow:hidden}
       <div class="ft"><i class="ti ti-truck"></i> Datos de importación</div>
       <div class="g2" style="margin-bottom:10px">
         <div class="campo"><label>Factura</label><input id="cg-m-factura-con" class="inp" type="number" step="0.01" placeholder="0.00"></div>
-        <div class="campo"><label>Peso (kg) *</label><input id="cg-m-peso-con" class="inp" type="number" step="0.001" placeholder="0.000" oninput="CG_calcularPreview('con')"></div>
+        <div class="campo"><label>Peso (kg)</label><input id="cg-m-peso-con" class="inp" type="number" step="0.001" placeholder="0.000" oninput="CG_calcularPreview('con')"></div>
       </div>
       <div class="g2" style="margin-bottom:10px">
         <div class="campo"><label>DANY FREIRE *</label><input id="cg-m-dany-con" class="inp" type="number" step="0.0001" placeholder="0.05" oninput="CG_calcularPreview('con')"></div>
@@ -2461,7 +2461,7 @@ body.shell-body{overflow:hidden}
         <div class="campo"><label>Costo *</label><input id="cg-e-costo-ug" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="g2" style="margin-top:10px">
-        <div class="campo"><label>Peso (kg) *</label><input id="cg-e-peso-ug" class="inp" type="number" step="0.001"></div>
+        <div class="campo"><label>Peso (kg)</label><input id="cg-e-peso-ug" class="inp" type="number" step="0.001"></div>
         <div class="campo"><label>P.V.P. ACTUAL *</label><input id="cg-e-pvp-ug" class="inp" type="number" step="0.0001"></div>
       </div>
       <div class="campo" style="margin-top:10px">
@@ -2617,7 +2617,7 @@ body.shell-body{overflow:hidden}
         <i class="ti ti-info-circle"></i> Latam x kg +ABG = Peso × $2 (tarifa fija)
       </div>
       <div class="g2" style="margin-bottom:10px">
-        <div class="campo"><label>Peso (kg) *</label><input id="cg-m-peso-ug" class="inp" type="number" step="0.001" placeholder="0.000" oninput="CG_calcularPreview('ug')"></div>
+        <div class="campo"><label>Peso (kg)</label><input id="cg-m-peso-ug" class="inp" type="number" step="0.001" placeholder="0.000" oninput="CG_calcularPreview('ug')"></div>
         <div class="campo"><label>P.V.P. ACTUAL *</label><input id="cg-m-pvp-ug" class="inp" type="number" step="0.0001" placeholder="0.0000" oninput="CG_calcularPreview('ug')"></div>
       </div>
       <div class="g2">
@@ -3218,7 +3218,7 @@ function PC_calcular() {
   var municipioPct = parseFloat(document.getElementById('pc-f-municipio').value)||0;
   var ivaPct = PC_getIvaPct();
   var meta = parseFloat(document.getElementById('pc-f-meta').value)||0;
-  if(!costo||!pvpIva||!jaba) { PC_resetPrev(); return null; }
+  if(!costo||!pvpIva) { PC_resetPrev(); return null; }
   var c = PC_calcUnit(costo,jaba,uni,pvpIva,undPaca,ivaPct,municipioPct);
   var sem = PC_getSem(c.rentPct, meta);
   var set = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
@@ -3274,7 +3274,7 @@ function PC_agregarProducto() {
   var pvpIva=parseFloat(document.getElementById('pc-f-pvp').value)||0;
   if(!costo||!pvpIva){ PC_showToast('Ingresa Costo y PVP con IVA','rojo'); return; }
   var c = PC_calcular();
-  if(!c){ PC_showToast('Completa Uni x Jaba y Precio Jaba para calcular','rojo'); return; }
+  if(!c){ PC_showToast('Completa Costo y PVP con IVA para calcular','rojo'); return; }
   var ivaPct = PC_getIvaPct();
   var meta = parseFloat(document.getElementById('pc-f-meta').value)||0;
   var prod = {
@@ -4537,7 +4537,7 @@ function LQ_calcular() {
   var pvpAct = parseFloat(document.getElementById('lq-f-pvp').value)||0;
   var municipioPct = parseFloat(document.getElementById('lq-f-municipio').value)||0;
   var meta = parseFloat(document.getElementById('lq-f-meta').value)||0;
-  if(!costo||!pvpAct||!jaba) { LQ_resetPrev(); return null; }
+  if(!costo||!pvpAct) { LQ_resetPrev(); return null; }
   var c = LQ_calcUnit(costo,jaba,uni,pvpAct,municipioPct);
   var sem = LQ_getSem(c.rentPct, meta);
   var set = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
@@ -4593,7 +4593,7 @@ function LQ_agregarProducto() {
   var pvpAct=parseFloat(document.getElementById('lq-f-pvp').value)||0;
   if(!costo||!pvpAct){ LQ_showToast('Ingresa Costo y P.V.P. Actual (sin IVA)','rojo'); return; }
   var c = LQ_calcular();
-  if(!c){ LQ_showToast('Completa Uni x Jaba y Precio Jaba para calcular','rojo'); return; }
+  if(!c){ LQ_showToast('Completa Costo y P.V.P. Actual para calcular','rojo'); return; }
   var meta = parseFloat(document.getElementById('lq-f-meta').value)||0;
   var prod = {
     id: Date.now()+Math.random(),
@@ -5857,9 +5857,9 @@ function CG_calcularPreview(tab){
   if(!costo||!pvpAct){prev.innerHTML='<span style="color:var(--mt)">Completa Costo y P.V.P. ACTUAL para ver el cálculo</span>';return;}
   try {
     var c;
-    if(tipo==='A'){var flete=CG_gVal('cg-m-flete-'+tab),dany=CG_gVal('cg-m-dany-'+tab);if(!flete){prev.innerHTML='<span style="color:var(--mt)">Falta Flete Barco Unitario</span>';return;}c=CG_calcA(costo,flete,dany,pvpAct,meta);}
-    else if(tipo==='B'){var peso=CG_gVal('cg-m-peso-'+tab),dany=CG_gVal('cg-m-dany-'+tab);if(!peso){prev.innerHTML='<span style="color:var(--mt)">Falta Peso (kg)</span>';return;}c=CG_calcB(costo,peso,dany,pvpAct,meta);}
-    else if(tipo==='C'){var peso=CG_gVal('cg-m-peso-'+tab);if(!peso){prev.innerHTML='<span style="color:var(--mt)">Falta Peso (kg)</span>';return;}c=CG_calcC(costo,peso,pvpAct,meta);}
+    if(tipo==='A'){var flete=CG_gVal('cg-m-flete-'+tab),dany=CG_gVal('cg-m-dany-'+tab);c=CG_calcA(costo,flete,dany,pvpAct,meta);}
+    else if(tipo==='B'){var peso=CG_gVal('cg-m-peso-'+tab),dany=CG_gVal('cg-m-dany-'+tab);c=CG_calcB(costo,peso,dany,pvpAct,meta);}
+    else if(tipo==='C'){var peso=CG_gVal('cg-m-peso-'+tab);c=CG_calcC(costo,peso,pvpAct,meta);}
     else if(tipo==='D'){c=CG_calcD(costo,cant,pvpAct,meta);}
     var semC=CG_semColor(c.sem),semT=CG_semTag(c.sem);
     prev.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px">'
@@ -5936,15 +5936,12 @@ function CG_agregarManual(tab){
   try {
     if(tipo==='A'){
       var flete=CG_gVal('cg-m-flete-'+tab),dany=CG_gVal('cg-m-dany-'+tab);
-      if(!flete){CG_showToast('Ingresa el Flete Barco Unitario','rojo');return;}
       extraFields={flete,dany}; c=CG_calcA(costo,flete,dany,pvpAct,meta);
     } else if(tipo==='B'){
       var peso=CG_gVal('cg-m-peso-'+tab),dany=CG_gVal('cg-m-dany-'+tab);
-      if(!peso){CG_showToast('Ingresa el Peso (kg)','rojo');return;}
       extraFields={peso,dany}; c=CG_calcB(costo,peso,dany,pvpAct,meta);
     } else if(tipo==='C'){
       var peso=CG_gVal('cg-m-peso-'+tab);
-      if(!peso){CG_showToast('Ingresa el Peso (kg)','rojo');return;}
       extraFields={peso}; c=CG_calcC(costo,peso,pvpAct,meta);
     } else if(tipo==='D'){
       c=CG_calcD(costo,cant,pvpAct,meta);
