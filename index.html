@@ -3696,7 +3696,7 @@ function PC_guardarEdicion() {
   var grp=document.getElementById('pc-e-grp').value; if(grp==='__OTRO__') grp=p.grp;
   if(!costo||!pvpIva){ PC_showToast('Costo y PVP son requeridos','rojo'); return; }
   var c=PC_calcUnit(costo,jaba,uni,pvpIva,undPaca,ivaPct,municipioPct);
-  arr[idx]=Object.assign({},p,{
+  var nuevoProducto = Object.assign({},p,{
     codigo:document.getElementById('pc-e-cod').value.trim()||'--',
     desc:document.getElementById('pc-e-desc').value.trim(),
     fam:fam, grp:grp, tipo:document.getElementById('pc-e-tipo').value, meta:PC_r2(meta),
@@ -3711,6 +3711,16 @@ function PC_guardarEdicion() {
     rentabilidad:PC_r4(c.rentabilidad), utilReal:PC_r4(c.utilReal),
     rentPct:c.rentPct, sem:PC_getSem(c.rentPct,meta), fechaEdit:new Date().toLocaleDateString('es-EC')
   });
+  nuevoProducto._audit = _auditRegistrar(p, nuevoProducto, [
+    {clave:'desc',etiqueta:'Descripción'},{clave:'codigo',etiqueta:'Código'},
+    {clave:'costo',etiqueta:'Costo'},{clave:'jaba',etiqueta:'P.Jaba'},
+    {clave:'uni',etiqueta:'Uni/Jaba'},{clave:'pvpIva',etiqueta:'PVP c/IVA'},
+    {clave:'undPaca',etiqueta:'Und/Paca'},{clave:'iva',etiqueta:'IVA%'},
+    {clave:'municipioPct',etiqueta:'Municipio%'},{clave:'meta',etiqueta:'Meta%'},
+    {clave:'fam',etiqueta:'Familia'},{clave:'grp',etiqueta:'Grupo'},
+    {clave:'tipo',etiqueta:'Tipo'},{clave:'cantidad',etiqueta:'Cantidad'}
+  ]);
+  arr[idx] = nuevoProducto;
   if(PC_editCtx) {
     // Edicion de importacion historica: recalcular el resumen guardado en PC_H
     var h = PC_H.find(function(x){return x.id===PC_editCtx;});
@@ -3781,10 +3791,12 @@ function PC_filaTablaHTML(d, hid) {
   var accionesCell = hid
     ? '<td class="sticky-l34" style="white-space:nowrap;padding:4px 6px" onclick="event.stopPropagation()">'
         +'<button onclick="event.stopPropagation();PC_abrirEditar('+d.id+',\''+hid+'\')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px" title="Editar y recalcular"><i class="ti ti-edit"></i></button>'
+        +_auditBadgeHTML(d)
       +'</td>'
     : '<td class="sticky-l34" style="white-space:nowrap;padding:4px 6px" onclick="event.stopPropagation()">'
         +'<button onclick="event.stopPropagation();PC_abrirEditar('+d.id+')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px;margin-right:3px" title="Editar y recalcular"><i class="ti ti-edit"></i></button>'
         +'<button onclick="event.stopPropagation();PC_delP('+d.id+')" style="background:var(--rlt);border:none;color:var(--rdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px" title="Eliminar"><i class="ti ti-trash"></i></button>'
+        +_auditBadgeHTML(d)
       +'</td>';
   var cbCell = hid ? '<td class="sticky-l0"></td>' : '<td class="sticky-l0" style="padding:6px 8px" onclick="event.stopPropagation()"><input type="checkbox" class="cb-row" data-id="'+d.id+'" onchange="PC_onCbChange()" onclick="event.stopPropagation()"></td>';
   return cbCell + accionesCell
@@ -3960,8 +3972,16 @@ function PC_refresh(){
   var n=PC_D.length;
   document.getElementById('pc-hdr-sub').textContent=n+' producto'+(n!==1?'s':'');
   PC_mostrarInfoImportacionActual();
-  var al=PC_D.filter(function(d){return d.sem==='rojo';}).length;
-  document.getElementById('pc-n-al').textContent=al;
+  var criticos=PC_D.filter(function(d){return d.sem==='critico';}).length;
+  var rojos=PC_D.filter(function(d){return d.sem==='rojo';}).length;
+  var amarillos=PC_D.filter(function(d){return d.sem==='amarillo';}).length;
+  var al=criticos+rojos+amarillos+(PC_alertasCeleste?PC_alertasCeleste.length:0)+(PC_duplicados?PC_duplicados.filter(function(d){return !d.allSame;}).length:0);
+  var badge=document.getElementById('pc-n-al');
+  if(badge){
+    badge.textContent=al;
+    badge.style.background=criticos>0?'#7f1d1d':rojos>0?'var(--rd)':amarillos>0?'#92400e':(PC_alertasCeleste&&PC_alertasCeleste.length>0)?'#0e7490':'#b45309';
+    badge.style.display=al>0?'':'none';
+  }
   PC_mostrarUlt();
   if(document.getElementById('pc-s-prods').classList.contains('on')) PC_renderTabla();
   if(document.getElementById('pc-s-kpis').classList.contains('on')) PC_renderKPIs();
@@ -4996,7 +5016,7 @@ function LQ_guardarEdicion() {
   var grp=document.getElementById('lq-e-grp').value; if(grp==='__OTRO__') grp=p.grp;
   if(!costo||!pvpAct){ LQ_showToast('Costo y P.V.P. Actual son requeridos','rojo'); return; }
   var c=LQ_calcUnit(costo,jaba,uni,pvpAct,municipioPct);
-  arr[idx]=Object.assign({},p,{
+  var nuevoProductoLQ = Object.assign({},p,{
     codigo:document.getElementById('lq-e-cod').value.trim()||'--',
     desc:document.getElementById('lq-e-desc').value.trim(),
     fam:fam, grp:grp, tipo:document.getElementById('lq-e-tipo').value, meta:LQ_r2(meta),
@@ -5011,6 +5031,15 @@ function LQ_guardarEdicion() {
     rentabilidad:LQ_r4(c.rentabilidad), utilReal:LQ_r4(c.utilReal),
     rentPct:c.rentPct, sem:LQ_getSem(c.rentPct,meta), fechaEdit:new Date().toLocaleDateString('es-EC')
   });
+  nuevoProductoLQ._audit = _auditRegistrar(p, nuevoProductoLQ, [
+    {clave:'desc',etiqueta:'Descripción'},{clave:'codigo',etiqueta:'Código'},
+    {clave:'costo',etiqueta:'Costo'},{clave:'jaba',etiqueta:'P.Jaba'},
+    {clave:'uni',etiqueta:'Uni/Jaba'},{clave:'pvpAct',etiqueta:'PVP Actual'},
+    {clave:'municipioPct',etiqueta:'Municipio%'},{clave:'meta',etiqueta:'Meta%'},
+    {clave:'fam',etiqueta:'Familia'},{clave:'grp',etiqueta:'Grupo'},
+    {clave:'tipo',etiqueta:'Tipo'},{clave:'cantidad',etiqueta:'Cantidad'}
+  ]);
+  arr[idx] = nuevoProductoLQ;
   if(LQ_editCtx) {
     var h = LQ_H.find(function(x){return x.id===LQ_editCtx;});
     if(h) {
@@ -5079,10 +5108,12 @@ function LQ_filaTablaHTML(d, hid) {
   var accionesCell = hid
     ? '<td class="sticky-l34" style="white-space:nowrap;padding:4px 6px" onclick="event.stopPropagation()">'
         +'<button onclick="event.stopPropagation();LQ_abrirEditar('+d.id+',\''+hid+'\')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px" title="Editar y recalcular"><i class="ti ti-edit"></i></button>'
+        +_auditBadgeHTML(d)
       +'</td>'
     : '<td class="sticky-l34" style="white-space:nowrap;padding:4px 6px" onclick="event.stopPropagation()">'
         +'<button onclick="event.stopPropagation();LQ_abrirEditar('+d.id+')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px;margin-right:3px" title="Editar y recalcular"><i class="ti ti-edit"></i></button>'
         +'<button onclick="event.stopPropagation();LQ_delP('+d.id+')" style="background:var(--rlt);border:none;color:var(--rdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px" title="Eliminar"><i class="ti ti-trash"></i></button>'
+        +_auditBadgeHTML(d)
       +'</td>';
   var cbCell = hid ? '<td class="sticky-l0"></td>' : '<td class="sticky-l0" style="padding:6px 8px" onclick="event.stopPropagation()"><input type="checkbox" class="cb-row" data-id="'+d.id+'" onchange="LQ_onCbChange()" onclick="event.stopPropagation()"></td>';
   return cbCell + accionesCell
@@ -5257,8 +5288,16 @@ function LQ_refresh(){
   var n=LQ_D.length;
   document.getElementById('lq-hdr-sub').textContent=n+' producto'+(n!==1?'s':'');
   LQ_mostrarInfoImportacionActual();
-  var al=LQ_D.filter(function(d){return d.sem==='rojo';}).length;
-  document.getElementById('lq-n-al').textContent=al;
+  var criticos=LQ_D.filter(function(d){return d.sem==='critico';}).length;
+  var rojos=LQ_D.filter(function(d){return d.sem==='rojo';}).length;
+  var amarillos=LQ_D.filter(function(d){return d.sem==='amarillo';}).length;
+  var al=criticos+rojos+amarillos+(LQ_alertasCeleste?LQ_alertasCeleste.length:0)+(LQ_duplicados?LQ_duplicados.filter(function(d){return !d.allSame;}).length:0);
+  var badge=document.getElementById('lq-n-al');
+  if(badge){
+    badge.textContent=al;
+    badge.style.background=criticos>0?'#7f1d1d':rojos>0?'var(--rd)':amarillos>0?'#92400e':(LQ_alertasCeleste&&LQ_alertasCeleste.length>0)?'#0e7490':'#b45309';
+    badge.style.display=al>0?'':'none';
+  }
   LQ_mostrarUlt();
   if(document.getElementById('lq-s-prods').classList.contains('on')) LQ_renderTabla();
   if(document.getElementById('lq-s-kpis').classList.contains('on')) LQ_renderKPIs();
@@ -6044,12 +6083,22 @@ function CG_guardarEdicion(tab){
   if(CG_FAMGRP_TABS.includes(tab)){
     famGrpFieldsEdit={fam:CG_gStr('cg-e-fam-'+tab)||p.fam, grp:CG_gStr('cg-e-grp-'+tab)||p.grp};
   }
-  arr[idx]=Object.assign({},p,{
+  var nuevoProductoCG = Object.assign({},p,{
     codigo:CG_gStr('cg-e-cod-'+tab)||'--',
     desc:CG_gStr('cg-e-desc-'+tab)||p.desc,
     cantidad:cant,costo:CG_r2(costo),pvpAct:CG_r2(pvpAct),meta:CG_r2(meta),
     fechaEdit:new Date().toLocaleDateString('es-EC')
   },extraFields,c,tab==='loc'?{observacion:CG_gStr('cg-e-obs-'+tab)}:{},famGrpFieldsEdit);
+  var camposCG = [
+    {clave:'desc',etiqueta:'Descripción'},{clave:'codigo',etiqueta:'Código'},
+    {clave:'costo',etiqueta:'Costo'},{clave:'pvpAct',etiqueta:'PVP Actual'},
+    {clave:'meta',etiqueta:'Meta%'},{clave:'cantidad',etiqueta:'Cantidad'},
+    {clave:'flete',etiqueta:'Flete'},{clave:'dany',etiqueta:'Dany Freire'},
+    {clave:'peso',etiqueta:'Peso (kg)'},{clave:'fam',etiqueta:'Familia'},
+    {clave:'grp',etiqueta:'Grupo'},{clave:'observacion',etiqueta:'Observación'}
+  ];
+  nuevoProductoCG._audit = _auditRegistrar(p, nuevoProductoCG, camposCG);
+  arr[idx] = nuevoProductoCG;
   if(CG_editCtx) {
     var h = CG_H[tab].find(function(x){return x.id===CG_editCtx;});
     if(h) {
@@ -6269,11 +6318,12 @@ function CG_filaTablaHTML(d, tab, hid) {
     +'<td>'+CG_f$(d.rent)+'</td>'
     +'<td><span class="tag '+CG_semTag(d.sem)+'" style="font-weight:700">'+d.rentPct+'%</span>'+(hid?'':CG_tendenciaHTML(tab,d))+'</td>';
   if(hid){
-    cells+='<td style="white-space:nowrap"><button onclick="CG_abrirEditar(\''+tab+'\','+d.id+',\''+hid+'\')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px"><i class="ti ti-edit"></i></button></td>';
+    cells+='<td style="white-space:nowrap"><button onclick="CG_abrirEditar(\''+tab+'\','+d.id+',\''+hid+'\')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px"><i class="ti ti-edit"></i></button>'+_auditBadgeHTML(d)+'</td>';
   } else {
     cells+='<td style="white-space:nowrap">'
       +'<button onclick="CG_abrirEditar(\''+tab+'\','+d.id+')" style="background:var(--blt);border:none;color:var(--bdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px;margin-right:3px"><i class="ti ti-edit"></i></button>'
       +'<button onclick="CG_borrarProd(\''+tab+'\','+d.id+')" style="background:var(--rlt);border:none;color:var(--rdk);cursor:pointer;padding:4px 8px;border-radius:5px;font-size:11px"><i class="ti ti-trash"></i></button>'
+      +_auditBadgeHTML(d)
       +'</td>';
   }
   return cells;
@@ -6633,7 +6683,18 @@ function CG_mostrarUlt(tab){
 function CG_refresh(tab){
   var d=CG_D[tab]||[];
   var h=CG_gEl('cg-hdr-sub-'+tab);if(h)h.textContent=d.length+' producto'+(d.length!==1?'s':'');
-  var n=CG_gEl('cg-n-al-'+tab);if(n)n.textContent=d.filter(function(x){return x.sem==='rojo';}).length;
+  var criticos=d.filter(function(x){return x.sem==='critico';}).length;
+  var rojos=d.filter(function(x){return x.sem==='rojo';}).length;
+  var amarillos=d.filter(function(x){return x.sem==='amarillo';}).length;
+  var celestes=(CG_alertasCeleste&&CG_alertasCeleste[tab])?CG_alertasCeleste[tab].length:0;
+  var dups=(CG_duplicados&&CG_duplicados[tab])?CG_duplicados[tab].filter(function(x){return !x.allSame;}).length:0;
+  var al=criticos+rojos+amarillos+celestes+dups;
+  var n=CG_gEl('cg-n-al-'+tab);
+  if(n){
+    n.textContent=al;
+    n.style.background=criticos>0?'#7f1d1d':rojos>0?'var(--rd)':amarillos>0?'#92400e':celestes>0?'#0e7490':'#b45309';
+    n.style.display=al>0?'':'none';
+  }
   CG_mostrarUlt(tab);
 }
 function CG_irSec(tab,s,el){
@@ -6892,10 +6953,11 @@ function buildProveedorData(productos) {
   return Object.keys(grupos).map(function(prov) {
     var prods = grupos[prov];
     var rp = prods.reduce(function(s,p){return s+p.rentPct;},0) / prods.length;
-    var verdes = prods.filter(function(p){return p.sem==='verde';}).length;
-    var rojos  = prods.filter(function(p){return p.sem==='rojo';}).length;
+    var verdes  = prods.filter(function(p){return p.sem==='verde';}).length;
+    var rojos   = prods.filter(function(p){return p.sem==='rojo';}).length;
+    var criticos= prods.filter(function(p){return p.sem==='critico';}).length;
     var costoTotal = prods.reduce(function(s,p){return s+(p.costo||0)*(p.cantidad||1);},0);
-    return {prov:prov, total:prods.length, rp:rp, verdes:verdes, rojos:rojos, costoTotal:costoTotal, prods:prods};
+    return {prov:prov, total:prods.length, rp:rp, verdes:verdes, rojos:rojos, criticos:criticos, costoTotal:costoTotal, prods:prods};
   }).sort(function(a,b){return b.rp-a.rp;});
 }
 
@@ -6956,6 +7018,83 @@ function cerrarModalProveedor() {
   document.getElementById('prov-prod-modal').classList.add('H');
 }
 
+// ── AUDITORÍA DE MODIFICACIONES (UTC-5, compartida entre PC, LQ y CG) ──────
+function _auditTimestamp() {
+  var now = new Date();
+  var utcM5 = new Date(now.getTime() - 5*60*60*1000);
+  var dd=String(utcM5.getUTCDate()).padStart(2,'0');
+  var mm=String(utcM5.getUTCMonth()+1).padStart(2,'0');
+  var yy=utcM5.getUTCFullYear();
+  var hh=String(utcM5.getUTCHours()).padStart(2,'0');
+  var min=String(utcM5.getUTCMinutes()).padStart(2,'0');
+  return {fecha:dd+'/'+mm+'/'+yy, hora:hh+':'+min};
+}
+function _auditRegistrar(productoAntes, productoDepues, camposAuditar) {
+  // camposAuditar: array de {clave, etiqueta, formato}
+  var cambios = [];
+  camposAuditar.forEach(function(cf) {
+    var antes = productoAntes[cf.clave], despues = productoDepues[cf.clave];
+    if(antes === undefined || despues === undefined) return;
+    var a = typeof antes==='number' ? Math.round(antes*10000)/10000 : String(antes||'');
+    var d = typeof despues==='number' ? Math.round(despues*10000)/10000 : String(despues||'');
+    if(String(a) !== String(d)) cambios.push({campo:cf.etiqueta, antes:a, despues:d});
+  });
+  if(!cambios.length) return productoDepues._audit || [];
+  var ts = _auditTimestamp();
+  var historial = (productoAntes._audit || []).slice(); // copiar para no mutar
+  historial.push({fecha:ts.fecha, hora:ts.hora, cambios:cambios});
+  return historial;
+}
+function _auditBadgeHTML(prod) {
+  if(!prod._audit || !prod._audit.length) return '';
+  return '<span title="Producto modificado '+(prod._audit.length>1?prod._audit.length+' veces':'1 vez')+' — haz clic para ver" '
+    +'onclick="event.stopPropagation();_auditMostrar(this)" '
+    +'data-audit="'+encodeURIComponent(JSON.stringify(prod._audit))+'" '
+    +'style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6b7280;cursor:pointer;margin-left:5px;vertical-align:middle;flex-shrink:0" '
+    +'class="audit-dot"></span>';
+}
+function _auditMostrar(el) {
+  var data = JSON.parse(decodeURIComponent(el.getAttribute('data-audit')));
+  var existing = document.getElementById('_audit-tooltip');
+  if(existing) existing.remove();
+  var div = document.createElement('div');
+  div.id = '_audit-tooltip';
+  div.style.cssText = 'position:fixed;z-index:9999;background:#1e1e1e;border:.5px solid #6b7280;border-radius:8px;padding:10px 13px;font-size:11px;color:#ccc;max-width:320px;box-shadow:0 4px 20px rgba(0,0,0,.6)';
+  var rect = el.getBoundingClientRect();
+  div.style.left = Math.min(rect.left, window.innerWidth-330)+'px';
+  div.style.top = (rect.bottom+6)+'px';
+  div.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    +'<span style="font-weight:600;color:#e5e7eb">Historial de modificaciones</span>'
+    +'<span onclick="document.getElementById(\'_audit-tooltip\').remove()" style="cursor:pointer;color:#9ca3af;font-size:13px;padding:0 3px">✕</span></div>'
+    + data.map(function(e){
+      return '<div style="border-top:.5px solid #374151;padding:5px 0">'
+        +'<span style="color:#9ca3af">'+e.fecha+' '+e.hora+'</span>'
+        +e.cambios.map(function(c){
+          return '<div style="margin-top:2px"><span style="color:#e5e7eb">'+c.campo+':</span> '
+            +'<span style="color:#f87171">'+c.antes+'</span>'
+            +' <span style="color:#6b7280">→</span> '
+            +'<span style="color:#86efac">'+c.despues+'</span></div>';
+        }).join('')+'</div>';
+    }).join('');
+  document.body.appendChild(div);
+  setTimeout(function(){ document.addEventListener('click', function h(){ div.remove(); document.removeEventListener('click',h); }); }, 100);
+}
+function _auditSeccionInforme(productos, titulo) {
+  var editados = productos.filter(function(p){ return p._audit && p._audit.length; });
+  if(!editados.length) return '';
+  return '<div style="margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb">'
+    +'<p style="font-size:10px;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Registro de modificaciones — '+titulo+'</p>'
+    + editados.map(function(p){
+      return '<div style="margin-bottom:8px;font-size:10px;color:#6b7280">'
+        +'<span style="font-weight:600;color:#374151">'+p.desc+'</span> '
+        + p._audit.map(function(e){
+          return '<span style="margin-left:6px">['+e.fecha+' '+e.hora+': '
+            +e.cambios.map(function(c){return c.campo+' '+c.antes+'→'+c.despues;}).join(', ')+']</span>';
+        }).join('')
+        +'</div>';
+    }).join('')+'</div>';
+}
+
 // ── MODAL GENERICO DE KPIs (usado por PC, LQ y CG) ────────────────
 function cerrarModalKpiImp() { document.getElementById('kpi-imp-modal').classList.add('H'); }
 function mostrarKpiImp(productos, nombre, fechaTexto, f$Fn, semTagFn) {
@@ -7010,15 +7149,17 @@ function renderProveedorPanel(productos, prefix, semFn, semTagFn, f$Fn) {
     } else {
       _PROV_DATA_CACHE[prefix] = datos;
       rank.innerHTML = '<div class="sx" style="max-height:300px;overflow-y:auto"><table>'
-        +'<thead><tr><th>Proveedor</th><th>Productos</th><th>Rent. Prom.</th><th>Verde</th><th>Rojo</th><th>Costo Total</th></tr></thead><tbody>'
+        +'<thead><tr><th>Proveedor</th><th>Productos</th><th>Rent. Prom.</th><th style="color:var(--gr2)">Verde</th><th style="color:var(--rd)">Rojo</th><th style="color:#dc2626">Crítico</th><th>Costo Total</th></tr></thead><tbody>'
         + datos.map(function(d, idx){
-          var sem = d.rp>0?'verde':d.rp===0?'amarillo':'rojo';
+          var semColor = d.criticos>0?'#7f1d1d':d.rojos>0?'var(--rlt)':d.rp>=12?'var(--glt)':'var(--ylt)';
+          var semTag = d.criticos>0?'tr':d.rojos>0?'tr':d.rp>=12?'tg':'ty';
           return '<tr style="cursor:pointer" onclick="abrirModalProveedor(\''+prefix+'\','+idx+')" title="Click para ver los productos de este proveedor">'
             +'<td style="font-weight:600">'+d.prov+'</td>'
             +'<td style="text-align:center">'+d.total+'</td>'
-            +'<td><span class="tag '+(d.rp>12?'tg':d.rp>=0?'ty':'tr')+'" style="font-weight:700">'+d.rp.toFixed(2)+'%</span></td>'
+            +'<td><span class="tag '+semTag+'" style="font-weight:700">'+d.rp.toFixed(2)+'%</span></td>'
             +'<td style="color:var(--gr2);font-weight:600;text-align:center">'+d.verdes+'</td>'
             +'<td style="color:var(--rd);font-weight:600;text-align:center">'+d.rojos+'</td>'
+            +'<td style="color:#dc2626;font-weight:700;text-align:center">'+(d.criticos>0?d.criticos:'—')+'</td>'
             +'<td style="font-size:11px">'+f$Fn(d.costoTotal)+'</td>'
             +'</tr>';
         }).join('')
@@ -7050,17 +7191,18 @@ function renderProveedorPanel(productos, prefix, semFn, semTagFn, f$Fn) {
   // ── Vista 3: Más problemáticos ───────────────────────────────
   var prob = document.getElementById(prefix+'-prov-prob');
   if(prob) {
-    var sorted = datos.slice().sort(function(a,b){return b.rojos-a.rojos;}).filter(function(d){return d.rojos>0;});
+    var sorted = datos.slice().sort(function(a,b){return (b.rojos+b.criticos)-(a.rojos+a.criticos);}).filter(function(d){return d.rojos>0||d.criticos>0;});
     if(!sorted.length){
       prob.innerHTML='<div class="al al-g"><i class="ti ti-check-circle"></i> Ningún proveedor tiene productos bajo la meta.</div>';
     } else {
       prob.innerHTML = sorted.map(function(d){
-        var pct = (d.rojos/d.total*100).toFixed(0);
+        var pct = ((d.rojos+d.criticos)/d.total*100).toFixed(0);
         return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;border:.5px solid var(--bd);background:var(--bg);margin-bottom:8px">'
           +'<div><p style="font-size:13px;font-weight:600">'+d.prov+'</p>'
           +'<p style="font-size:11px;color:var(--mt)">'+d.total+' productos · Rent. prom. '+d.rp.toFixed(2)+'%</p></div>'
           +'<div style="text-align:right">'
-          +'<p style="font-size:15px;font-weight:700;color:var(--rd)">'+d.rojos+' rojos</p>'
+          +(d.criticos>0?'<p style="font-size:13px;font-weight:700;color:#dc2626">'+d.criticos+' crítico'+(d.criticos>1?'s':'')+'</p>':'')
+          +(d.rojos>0?'<p style="font-size:13px;font-weight:700;color:var(--rd)">'+d.rojos+' rojo'+(d.rojos>1?'s':'')+'</p>':'')
           +'<p style="font-size:10px;color:var(--mt)">'+pct+'% del total</p></div>'
           +'</div>';
       }).join('');
@@ -7324,6 +7466,7 @@ function _buildInformeHTML(opts) {
   ${alertasHtml}
   ${obsHtml}
   ${provHtml}
+  ${_auditSeccionInforme(opts.productos, opts.nombreImportacion)}
 
   <div class="inf-footer">Generado automáticamente por el Dashboard de Rentabilidad — Proinsular Supermercado · ${new Date().toLocaleString('es-EC')}</div>
 </body></html>`;
